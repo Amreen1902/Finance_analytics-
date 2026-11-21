@@ -1,0 +1,8 @@
+date,description,amount,category
+2026-11-02,Freelance project payment,12000,Freelance
+2026-11-03,"Books, stationery",-850,Education
+2026-11-05,Swiggy order,-420,Dining
+2026-11-06,Metro card recharge,-500,Transport
+05/11/2026,Gym membership,-1500,Health
+2026-11-08,Cashback,(150),Misc
+bad-date,Broken row,-100,Misc

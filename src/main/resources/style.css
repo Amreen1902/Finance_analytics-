@@ -1,0 +1,10 @@
+.kpi-card {
+    -fx-background-color: #f4f6f8;
+    -fx-background-radius: 8;
+    -fx-padding: 12 16 12 16;
+    -fx-border-color: #dfe4ea;
+    -fx-border-radius: 8;
+}
+.kpi-title { -fx-text-fill: #6b7785; -fx-font-size: 12px; }
+.kpi-value { -fx-font-size: 22px; -fx-font-weight: bold; -fx-text-fill: #1f2d3d; }
+.tab-pane .tab-label { -fx-font-size: 13px; }
