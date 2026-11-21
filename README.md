@@ -1,91 +1,190 @@
-# Personal Finance Analytics (JavaFX + SQLite)
+# 💰 Personal Finance Analytics
 
-Desktop app to track transactions, set budgets, and analyse spending with SQL window functions.
+A desktop-based Personal Finance Management and Analytics application built using **Java 21, JavaFX, JDBC, and MySQL 8**.
 
-## Run Application
+The application helps users manage income, track expenses, monitor monthly budgets, and analyse financial trends using advanced SQL operations.
 
-### Option 1: Quick Launch Script (Recommended)
-Double-click `run.bat` or execute in terminal:
+## 📌 Project Overview
 
-```cmd
-run.bat
+Personal Finance Analytics transforms everyday financial transactions into meaningful insights through an interactive desktop dashboard.
+
+Instead of performing all calculations in Java, the application uses SQL queries, aggregate functions, window functions, and database views to generate financial analytics.
+
+## 🛠️ Tech Stack
+
+| Technology | Purpose |
+|---|---|
+| Java 21 | Core application logic |
+| JavaFX 21 | Desktop GUI |
+| MySQL 8 | Database management |
+| JDBC | Database connectivity |
+| Maven | Dependency management |
+| JUnit 5 | Unit testing |
+| CSS | UI styling |
+
+## ✨ Key Features
+
+### 1. Transaction Management
+- Add and delete income and expense transactions.
+- Filter transactions by category, date, and type.
+- Search transactions by description.
+- Import transactions through CSV files.
+- Prevent duplicate transaction entries.
+
+### 2. Financial Dashboard
+- Monthly income and expense summaries.
+- Net savings calculations.
+- Savings rate analysis.
+- Category-wise spending visualization.
+- Monthly financial trend charts.
+
+### 3. Budget Management
+- Set monthly budgets for individual categories.
+- Track actual spending against budget limits.
+- Monitor budget utilization.
+- Identify overspending categories.
+
+### 4. Advanced SQL Analytics
+The project demonstrates practical SQL concepts:
+
+- INNER JOIN and LEFT JOIN
+- GROUP BY and HAVING
+- Common Table Expressions (CTEs)
+- Window Functions
+- LAG() for month-over-month analysis
+- Moving averages
+- Running balances
+- Aggregate functions
+- Database Views
+- UPSERT operations
+- Transaction management and rollback
+
+## 🏗️ Project Architecture
+
+```text
+             JavaFX Application
+                     |
+          -----------------------
+          |          |          |
+     Transactions Dashboard  Budgets
+          |          |          |
+          -----------------------
+                     |
+                EventBus
+                     |
+             Async Worker
+                     |
+                 FinanceDAO
+                     |
+                  JDBC
+                     |
+                 MySQL 8
 ```
-or with PowerShell:
+
+## 📂 Project Structure
+
+```text
+Finance_analytics/
+│
+├── database/
+│   └── schema.sql
+│
+├── src/
+│   ├── main/
+│   │   ├── java/
+│   │   │   └── com/financeanalytics/
+│   │   └── resources/
+│   │
+│   └── test/
+│
+├── pom.xml
+├── README.md
+├── sample-import.csv
+└── .gitignore
+```
+
+## ⚙️ Installation and Setup
+
+### Prerequisites
+
+- JDK 21
+- MySQL Server 8.0+
+- Maven
+- Visual Studio Code
+
+### Step 1: Clone the repository
+
+```bash
+git clone https://github.com/Amreen1902/Finance_analytics-.git
+```
+
+### Step 2: Open the project
+
+```bash
+cd Finance_analytics-
+```
+
+### Step 3: Configure MySQL
+
+Execute the SQL script:
+
+```text
+database/schema.sql
+```
+
+This creates the database and required tables and views.
+
+### Step 4: Configure database credentials
+
+Set your environment variables:
+
 ```powershell
-.\run.ps1
+$env:FINANCE_DB_USER="root"
+$env:FINANCE_DB_PASSWORD="your_password"
 ```
 
-### Option 2: Maven
-Requires JDK 21+ and Maven.
+### Step 5: Run tests
+
+```bash
+mvn clean test
+```
+
+### Step 6: Launch the application
 
 ```bash
 mvn javafx:run
 ```
 
-First launch creates `finance.db` and seeds ~6 months of demo data. Delete the file to reset.
-Drag `sample-import.csv` onto the window to test CSV import (it includes one bad row and one `dd/MM/yyyy` date on purpose).
+## 📊 Database Design
+
+The application uses three primary tables:
+
+- `categories` – Stores transaction categories.
+- `transactions` – Stores income and expense records.
+- `budgets` – Stores monthly category budgets.
+
+It also uses two database views:
+
+- `v_monthly_summary`
+- `v_budget_status`
+
+## 🔮 Future Improvements
+
+- Interactive financial reports.
+- Export analytics to PDF and Excel.
+- User authentication and multiple accounts.
+- Improved financial forecasting.
+- Database integration testing.
+- More advanced spending predictions.
+
+## 👩‍💻 Author
+
+**Amreen**
+
+B.Tech Computer Science and Engineering
+
+GitHub: [@Amreen1902](https://github.com/Amreen1902)
 
 ---
 
-## Run Tests
-Automated suite tests DAOs, SQL window functions, duplicate constraints, and CSV import/export:
-
-```cmd
-run-tests.bat
-```
-or with PowerShell:
-```powershell
-.\run-tests.ps1
-```
-
----
-
-## Build
-To recompile all classes:
-
-```cmd
-build.bat
-```
-or
-```powershell
-.\build.ps1
-```
-
----
-
-## Features
-- **Transactions:** 
-  - Live filters (text search, category dropdown, income/expense type, date range picker)
-  - Sortable table with running balance computed via SQL window functions
-  - Add & delete transactions with duplicate protection
-  - **CSV Import:** Via button or direct drag-and-drop onto the window
-  - **CSV Export:** Export filtered transactions view directly to `.csv`
-- **Dashboard:** KPI summary cards, category spend PieChart, income/expense/3-month moving average LineChart, and month-over-month table
-- **Budgets:** Budget vs actual with colour-coded progress bars and upsert limit management
-
----
-
-## SQL Used (`schema.sql`, `FinanceDao.java`)
-| Concept | Where |
-|---|---|
-| Window `SUM() OVER` running balance | `transactionsWithBalance()` |
-| `LAG()` month-over-month change, moving `AVG()` (`ROWS BETWEEN 2 PRECEDING`) | `v_monthly_summary` |
-| CTE feeding window functions | `v_monthly_summary` |
-| `GROUP BY` + `HAVING` | `spendByCategory()` (slider on dashboard) |
-| Views, `LEFT JOIN` aggregate | `v_budget_status` |
-| UPSERT `ON CONFLICT DO UPDATE` | `upsertBudget()` |
-| Unique index for idempotent imports, CHECK + FK constraints | `schema.sql` |
-| Single transaction with rollback | `CsvImporter` |
-
----
-
-## Architecture
-```
-ui (JavaFX tabs) -> Async (single DB worker thread) -> FinanceDao -> SQLite
-      ^                                                    |
-      +---------------- EventBus (TRANSACTIONS_CHANGED) ---+
-```
-
-- Writes publish an event; every tab reloads itself asynchronously (tabs never call each other).
-- All DB calls run on a dedicated background thread: UI never freezes and SQLite writes never collide.
-- All queries use `PreparedStatement`.
+⭐ If you find this project interesting, consider giving it a star!
