@@ -177,13 +177,6 @@ It also uses two database views:
 - Database integration testing.
 - More advanced spending predictions.
 
-## 👩‍💻 Author
-
-**Amreen**
-
-B.Tech Computer Science and Engineering
-
-GitHub: [@Amreen1902](https://github.com/Amreen1902)
 
 ---
 
